@@ -176,7 +176,7 @@ long ipv6_get_fragment_id(const struct ip6_hdr *ip6, unsigned int len) {
    Proxy timing is adjusted, but proxy->latestid is NOT ADJUSTED --
    you'll have to do that yourself.   Probes_sent is set to the number
    of probe packets sent during execution */
-static int_least64_t ipid_proxy_probe(struct idle_proxy_info *proxy, int *probes_sent,
+static int32_t ipid_proxy_probe(struct idle_proxy_info *proxy, int *probes_sent,
                             int *probes_rcvd) {
   struct timeval tv_end;
   int tries = 0;
@@ -184,7 +184,7 @@ static int_least64_t ipid_proxy_probe(struct idle_proxy_info *proxy, int *probes
   int sent = 0, rcvd = 0;
   int maxtries = 3; /* The maximum number of tries before we give up */
   struct timeval tv_sent[3], rcvdtime;
-  int_least64_t ipid = -1;
+  int32_t ipid = -1;
   int to_usec;
   unsigned int bytes;
   int base_port;
@@ -317,7 +317,7 @@ static u16 byteswap_u16(u16 h) {
    one, assuming the given IP ID Sequencing class.  Returns -1 if the
    distance cannot be determined */
 
-static int_least64_t  ipid_distance(int seqclass , u32 startid, u32 endid) {
+static int32_t  ipid_distance(int seqclass , u32 startid, u32 endid) {
   if (seqclass == IPID_SEQ_INCR)
     return endid - startid;
 
@@ -467,7 +467,7 @@ static void initialize_idleproxy(struct idle_proxy_info *proxy, char *proxyName,
   char *p, *q, *r;
   char *endptr = NULL;
   int seq_response_num;
-  int_least64_t newipid;
+  int32_t newipid;
   unsigned int i;
   char filter[512]; /* Libpcap filter string */
   char name[MAXHOSTNAMELEN + 1];
@@ -480,7 +480,7 @@ static void initialize_idleproxy(struct idle_proxy_info *proxy, char *proxyName,
   struct ip *ip;
   struct tcp_hdr *tcp;
   int distance;
-  int_least64_t ipids[NUM_IPID_PROBES];
+  int32_t ipids[NUM_IPID_PROBES];
   u8 probe_returned[NUM_IPID_PROBES];
   struct route_nfo rnfo;
   assert(proxy);
@@ -731,7 +731,7 @@ static void initialize_idleproxy(struct idle_proxy_info *proxy, char *proxyName,
               fatal("IPv6 packet without fragmentation header received - issues with the zombie?");
           }
           /* now that the additional ipv6 stuff is done, we continue similar */
-          if (lastipid != 0 && newipid == lastipid) {
+          if (lastipid != 0 && newipid == (int32_t)lastipid) {
             continue; /* probably a duplicate */
           }
           lastipid = newipid;
@@ -953,7 +953,7 @@ static int idlescan_countopen2(struct idle_proxy_info *proxy,
   struct timeval probe_times[4];
   int pr0be;
   static u32 seq = 0;
-  int_least64_t newipid = 0;
+  int32_t newipid = 0;
   int sleeptime;
   int lasttry = 0;
   int dotry3 = 0;
