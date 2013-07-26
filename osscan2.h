@@ -155,7 +155,7 @@ typedef enum OFProbeType {
 void os_scan2(std::vector<Target *> &Targets);
 
 int get_initial_ttl_guess(u8 ttl);
-int get_ipid_sequence(int numSamples, int32_t *ipids, int islocalhost);
+int get_ipid_sequence(int numSamples, int *ipids, int islocalhost);
 
 
 /******************************************************************************

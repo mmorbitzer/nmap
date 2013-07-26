@@ -229,12 +229,13 @@ static int ipid_proxy_probe(struct idle_proxy_info *proxy, int *probes_sent,
                   NULL, 0);
     else {
       ipv6_packet = build_tcp_raw_ipv6(proxy->host.v6sourceip(), proxy->host.v6hostip(),
-                        0x00, 0x0000,  o.ttl,
+                        0x00, 0x0000,  
+                        o.ttl,
                         base_port + tries, proxy->probe_port,
-                        seq_base + (packet_send_count++ * 500) + 1, ack,
-                        0, TH_SYN | TH_ACK, 0, 0,
+                        seq_base + (packet_send_count++ * 500) + 1, ack, 0, TH_SYN | TH_ACK, 0, 0,
                         (u8 *) "\x02\x04\x05\xb4", 4,
-                        NULL, 0, &packetlen);
+                        NULL, 0, 
+                        &packetlen);
       proxy->host.TargetSockAddr(&ss, &sslen);
       res = send_ip_packet(proxy->rawsd, proxy->ethptr, &ss, ipv6_packet, packetlen);
       if (res == -1)
@@ -321,7 +322,7 @@ static u16 byteswap_u16(u16 h) {
    one, assuming the given IP ID Sequencing class.  Returns -1 if the
    distance cannot be determined */
 
-static int32_t  ipid_distance(int seqclass , u32 startid, u32 endid) {
+static int  ipid_distance(int seqclass , u32 startid, u32 endid) {
   if (seqclass == IPID_SEQ_INCR)
     return endid - startid;
 
@@ -508,7 +509,6 @@ static void initialize_idleproxy(struct idle_proxy_info *proxy, char *proxyName,
   assert(proxy);
   assert(proxyName);
   int res;
-
 
   ack = get_random_u32();
 
@@ -797,7 +797,7 @@ static void initialize_idleproxy(struct idle_proxy_info *proxy, char *proxyName,
   /* Yeah!  We're done sending/receiving probes ... now lets ensure all of our responses are adjacent in the array */
   for (i = 0, probes_returned = 0; i < NUM_IPID_PROBES; i++) {
     if (probe_returned[i]) {
-      if (i > (unsigned int) probes_returned)
+      if (i > probes_returned)
         ipids[probes_returned] = ipids[i];
       probes_returned++;
     }
@@ -979,7 +979,7 @@ static int idlescan_countopen2(struct idle_proxy_info *proxy,
   struct timeval probe_times[4];
   int pr0be;
   static u32 seq = 0;
-  int32_t newipid = 0;
+  int newipid = 0;
   int sleeptime;
   int lasttry = 0;
   int dotry3 = 0;
@@ -1032,12 +1032,12 @@ static int idlescan_countopen2(struct idle_proxy_info *proxy,
                    o.extra_payload, o.extra_payload_length);
    } else {
         packet = build_tcp_raw_ipv6(proxy->host.v6hostip(), target->v6hostip(),
-                                  0x00, 0x0000,  o.ttl,
-                                  proxy->probe_port, ports[pr0be],
-                                  seq, 0,
-                                  0, TH_SYN, 0, 0,
-                                  (u8 *) "\x02\x04\x05\xb4", 4,
-                                  o.extra_payload, o.extra_payload_length, &packetlen);
+                                    0x00, 0x0000,  
+                                    o.ttl,
+                                    proxy->probe_port, ports[pr0be], seq, 0, 0, TH_SYN, 0, 0,
+                                    (u8 *) "\x02\x04\x05\xb4", 4,
+                                    o.extra_payload, o.extra_payload_length, 
+                                    &packetlen);
         res = send_ip_packet(proxy->rawsd, eth.ethsd ? &eth : NULL, &ss, packet, packetlen);
         if (res == -1)
           fatal("Error occured while trying to send IPv6 packet");
