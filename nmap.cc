@@ -2657,7 +2657,7 @@ const char *ipidclass2ascii(int seqclass) {
   case IPID_SEQ_INCR:
     return "Incremental";
   case IPID_SEQ_INCR_BY_2:
-    return "Incremental by 2";
+    return "Incrementing by 2";
   case IPID_SEQ_BROKEN_INCR:
     return "Broken little-endian incremental";
   case IPID_SEQ_RD:
