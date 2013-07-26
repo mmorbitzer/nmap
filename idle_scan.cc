@@ -322,7 +322,7 @@ static u16 byteswap_u16(u16 h) {
    one, assuming the given IP ID Sequencing class.  Returns -1 if the
    distance cannot be determined */
 
-static int  ipid_distance(int seqclass , u32 startid, u32 endid) {
+static int ipid_distance(int seqclass , u32 startid, u32 endid) {
   if (seqclass == IPID_SEQ_INCR)
     return endid - startid;
 
