@@ -808,7 +808,7 @@ static void initialize_idleproxy(struct idle_proxy_info *proxy, char *proxyName,
           proxy->host.HostName(), proxy->host.targetipstr(),
           proxy->probe_port);
 
-  proxy->seqclass = get_ipid_sequence(probes_returned, ipids, 0);
+  proxy->seqclass = get_ipid_sequence_16(probes_returned, ipids, 0);
   switch (proxy->seqclass) {
   case IPID_SEQ_INCR:
   case IPID_SEQ_INCR_BY_2:
