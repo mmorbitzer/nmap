@@ -210,6 +210,7 @@ int get_initial_ttl_guess(u8 ttl) {
     return 255;
 }
 
+
 /* This function takes an array of "numSamples" IP IDs and analyzes
  them to determine their sequenceability classification.  It returns
  one of the IPID_SEQ_* classifications defined in nmap.h .  If the
