@@ -297,10 +297,11 @@ int identify_sequence(int numSamples, u32 *ipid_diffs, int islocalhost, int alli
   return IPID_SEQ_UNKNOWN;
 }
 
-/* Calculate the differences between the ipid values and write them
-   into the ipid array */
+/* Calculate the distances between the ipids and write them
+   into the ipid_diffs array */
 int get_diffs(u32 *ipid_diffs, int numSamples, int *ipids, int islocalhost) {
-  int i, allipideqz=1;
+  int i;
+  int allipideqz = 1;
 
   if (numSamples < 2)
     return IPID_SEQ_UNKNOWN;
@@ -335,10 +336,13 @@ int get_ipid_sequence_32(int numSamples, int *ipids, int islocalhost) {
 
 /* Indentify the ipid sequence for 16-bit IPID values (IPv4) */
 int get_ipid_sequence_16(int numSamples, int *ipids, int islocalhost) {
-  int i,allipideqz=1;
+  int i;
+  int allipideqz=1;
   u32 ipid_diffs[32];
   assert(numSamples < (int) (sizeof(ipid_diffs) / 2));
   allipideqz = get_diffs(ipid_diffs, numSamples, ipids, islocalhost);
+  /* AND with 0xffff so that in case the 16 bit counter was
+   * flipped over we still have a continuous sequence */ 
   for (i = 0; i < numSamples; i++) {
     ipid_diffs[i] = ipid_diffs[i] & 0xffff;  
   }
